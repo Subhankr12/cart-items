@@ -31,15 +31,37 @@ class Cart extends React.Component {
         }
     }
 
+    handleChangeQuantity = (index, increase) =>{
+        const duplicateProductArray = [...this.state.products];
+
+        duplicateProductArray[index].qty = increase ? duplicateProductArray[index].qty + 1 : !increase && duplicateProductArray[index].qty !== 0 ? duplicateProductArray[index].qty - 1 : duplicateProductArray[index].qty;
+
+        this.setState({
+            products: duplicateProductArray,
+        })
+    }
+
+    handleDelete = (index) => {
+        const duplicateProductArray = [...this.state.products];
+        duplicateProductArray.splice(index, 1);
+
+        this.setState({
+            products: duplicateProductArray,
+        })
+    }
+
     render() { 
         const {products} = this.state;
         return ( 
             <div className="cart">
-                {products.map((product) => 
+                {products.map((product, index) => 
                     <CartItem 
                     product={product} 
-                    key={product.id}
-                     />
+                    key={index}
+                    index={index}
+                    onChangeQuantity={this.handleChangeQuantity}
+                    onDelete={this.handleDelete}
+                    />
                 )}
             </div>
          );
